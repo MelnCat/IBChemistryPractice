@@ -65,7 +65,7 @@ const generate = () => {
 	const cationCharge = sample(cation.OxidationStates.filter(x => x > 0));
 	const anionNumber = Math.abs(cationCharge / gcd(anionCharge, cationCharge));
 	const cationNumber = Math.abs(anionCharge / gcd(anionCharge, cationCharge));
-	const hydrateNum = hydrate ? 1 + Math.floor(Math.random() * 10) : 0;
+	const hydrateNum = hydrate.value ? 1 + Math.floor(Math.random() * 10) : 0;
 	const name = subscript(
 		`${cation.Symbol}${cationNumber === 1 ? "" : cationNumber}${
 			"formula" in anion
@@ -73,13 +73,13 @@ const generate = () => {
 					? `(${anion.formula})`
 					: anion.formula
 				: anion.Symbol
-		}${anionNumber === 1 ? "" : anionNumber}${hydrate ? ` . ${hydrateNum > 1 ? hydrateNum : ""}H2O` : ""}`
+		}${anionNumber === 1 ? "" : anionNumber}${hydrate.value ? ` . ${hydrateNum > 1 ? hydrateNum : ""}H2O` : ""}`
 	);
 	current.value = {
 		formula: name,
 		name: `${cation.Name}${
 			cation.OxidationStates.length > 1 ? `(${roman(cationCharge)})` : ""
-		} ${"name" in anion ? anion.name : anionName(anion.Name)}${hydrate ? ` ${greekPrefix("Hydrate", hydrateNum)}` : ""}`,
+		} ${"name" in anion ? anion.name : anionName(anion.Name)}${hydrate.value ? ` ${greekPrefix("Hydrate", hydrateNum)}` : ""}`,
 	};
 };
 generate();
