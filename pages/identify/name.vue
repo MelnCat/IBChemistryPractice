@@ -6,7 +6,7 @@ const findName = ref(true);
 const input = ref("");
 const err = ref("");
 setInterval(() => {
-	input.value=subscript(input.value);
+	input.value = subscript(input.value);
 }, 1);
 const submit = () => {
 	const content = input.value.toLowerCase().replaceAll(" ", "").trim();
@@ -14,17 +14,38 @@ const submit = () => {
 		if (content === current.value.name.toLowerCase().replaceAll(" ", "")) {
 			generate();
 			input.value = "";
-			err.value="";
-		} else err.value="Wrong"
+			err.value = "";
+		} else err.value = "Wrong";
 	} else {
-		if (content === current.value.formula.toLowerCase().replaceAll(" ", "")) {
+		if (
+			content === current.value.formula.toLowerCase().replaceAll(" ", "")
+		) {
 			generate();
-			err.value="";
+			err.value = "";
 			input.value = "";
-		} else err.value="Wrong"
+		} else err.value = "Wrong";
 	}
-}
+};
+
 const generate = () => {
+	if (!ionic.value) {
+		const first = sample(nonmetals);
+		const second = sample(nonmetals.filter(x => first !== x));
+		const firstNum = 1 + Math.floor(Math.random() * 10);
+		const secondNum = 1 + Math.floor(Math.random() * 10);
+		const firstName =
+			firstNum === 1 ? first.Name : greekPrefix(first.Name, firstNum);
+		const secondName = greekPrefix(anionName(second.Name), secondNum);
+		current.value = {
+			name: `${firstName} ${secondName}`,
+			formula: subscript(
+				`${first.Symbol}${firstNum === 1 ? "" : firstNum}${
+					second.Symbol
+				}${secondNum === 1 ? "" : secondNum}`
+			),
+		};
+		return;
+	}
 	const anion = polyatomic.value
 		? sample(polyatomicIons.filter(x => x.charge < 0))
 		: sample(
@@ -55,7 +76,7 @@ const generate = () => {
 		formula: name,
 		name: `${cation.Name}${
 			cation.OxidationStates.length > 1 ? `(${roman(cationCharge)})` : ""
-		} ${"name" in anion ? anion.name : anion.Name}`,
+		} ${"name" in anion ? anion.name : anionName(anion.Name)}`,
 	};
 };
 generate();
@@ -76,15 +97,31 @@ generate();
 		</div>
 		<div>
 			Find:
-			<button @click="findName = !findName; generate();">
+			<button
+				@click="
+					findName = !findName;
+					generate();
+				"
+			>
 				{{ findName ? "Name" : "Formula" }}
 			</button>
 		</div>
 	</section>
-	<button @click="generate()">AIKS</button>
+	<button @click="generate()">Reload</button>
 	<h1>Find The {{ findName ? "Name" : "Formula" }}</h1>
 	<h2>{{ findName ? current.formula : current.name }}</h2>
-	<input v-model="input" @change="err='';input=subscript(input)" @keypress="e => {e.key === 'Enter' && submit()}">
-	<button @click="submit()">Submit</button> {{err}}
+	<input
+		v-model="input"
+		@change="
+			err = '';
+			input = subscript(input);
+		"
+		@keypress="
+			e => {
+				e.key === 'Enter' && submit();
+			}
+		"
+	/>
+	<button @click="submit()">Submit</button> {{ err }}
 </template>
 <style></style>

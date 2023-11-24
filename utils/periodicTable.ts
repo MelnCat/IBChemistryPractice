@@ -1,7 +1,42 @@
-import type { periodicTable } from "./PubChemElements_all";
 import { subscript } from "./text";
 
 type GroupBlock = (typeof periodicTable)[number]["GroupBlock"];
+
+export const greekPrefix = (s: string, n: number) => s.toLowerCase() === "oxide" ? [
+	"?ERR?", "Monoxide", "Dioxide", "Trioxide", "Tetroxide", "Pentoxide", "Hexoxide", "Heptoxide", "Octoxide", "Nonoxide", "Decoxide"
+][n] :
+	(
+		[
+			"?ERR?",
+			"Mono",
+			"Di",
+			"Tri",
+			"Tetra",
+			"Penta",
+			"Hexa",
+			"Hepta",
+			"Octa",
+			"Nona",
+			"Deca",
+		][n] + s.toLowerCase()
+	);
+
+export const anionName = (e: string) =>
+	({
+		Hydrogen: "Hydride",
+		Carbon: "Carbide",
+		Nitrogen: "Nitride",
+		Oxygen: "Oxide",
+		Fluorine: "Fluoride",
+		Phosphorus: "Phosphide",
+		Sulfur: "Sulfide",
+		Chlorine: "Chloride",
+		Selenium: "Selenide",
+		Bromine: "Bromide",
+		Iodine: "Iodide",
+		Astatine: "Astatide",
+	}[e]) ?? e;
+
 
 export const groupCategory = (group: GroupBlock) => {
 	switch (group) {
@@ -22,6 +57,9 @@ export const groupCategory = (group: GroupBlock) => {
 	}
 };
 
+export const nonmetals = periodicTable.filter(
+	x => groupCategory(x.GroupBlock) == "nonmetal"
+);
 export const polyatomicIons = (
 	[
 		["Ammonium", "NH4", 1],
