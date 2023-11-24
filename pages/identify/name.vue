@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const polyatomic = ref(true);
 const ionic = ref(true);
+const hydrate = ref(false);
 const current = ref({ name: "Loading", formula: "" });
 const findName = ref(true);
 const input = ref("");
@@ -46,6 +47,7 @@ const generate = () => {
 		};
 		return;
 	}
+
 	const anion = polyatomic.value
 		? sample(polyatomicIons.filter(x => x.charge < 0))
 		: sample(
@@ -63,6 +65,7 @@ const generate = () => {
 	const cationCharge = sample(cation.OxidationStates.filter(x => x > 0));
 	const anionNumber = Math.abs(cationCharge / gcd(anionCharge, cationCharge));
 	const cationNumber = Math.abs(anionCharge / gcd(anionCharge, cationCharge));
+	const hydrateNum = hydrate ? 1 + Math.floor(Math.random() * 10) : 0;
 	const name = subscript(
 		`${cation.Symbol}${cationNumber === 1 ? "" : cationNumber}${
 			"formula" in anion
@@ -70,13 +73,13 @@ const generate = () => {
 					? `(${anion.formula})`
 					: anion.formula
 				: anion.Symbol
-		}${anionNumber === 1 ? "" : anionNumber}`
+		}${anionNumber === 1 ? "" : anionNumber}${hydrate ? ` . ${hydrateNum > 1 ? hydrateNum : ""}H2O` : ""}`
 	);
 	current.value = {
 		formula: name,
 		name: `${cation.Name}${
 			cation.OxidationStates.length > 1 ? `(${roman(cationCharge)})` : ""
-		} ${"name" in anion ? anion.name : anionName(anion.Name)}`,
+		} ${"name" in anion ? anion.name : anionName(anion.Name)}${hydrate ? ` ${greekPrefix("Hydrate", hydrateNum)}` : ""}`,
 	};
 };
 generate();
@@ -89,12 +92,20 @@ generate();
 				{{ ionic ? "Ionic" : "Covalent" }}
 			</button>
 		</div>
-		<div>
-			Anion:
-			<button @click="polyatomic = !polyatomic">
-				{{ polyatomic ? "Polyatomic" : "Element" }}
-			</button>
-		</div>
+		<template v-if="ionic">
+			<div>
+				Anion:
+				<button @click="polyatomic = !polyatomic">
+					{{ polyatomic ? "Polyatomic" : "Element" }}
+				</button>
+			</div>
+			<div>
+				Hydrate:
+				<button @click="hydrate = !hydrate">
+					{{ hydrate ? "Yes" : "No" }}
+				</button>
+			</div>
+		</template>
 		<div>
 			Find:
 			<button
