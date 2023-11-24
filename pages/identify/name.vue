@@ -73,8 +73,8 @@ const generate = () => {
 					? `(${anion.formula})`
 					: anion.formula
 				: anion.Symbol
-		}${anionNumber === 1 ? "" : anionNumber}${hydrate.value ? ` . ${hydrateNum > 1 ? hydrateNum : ""}H2O` : ""}`
-	);
+		}${anionNumber === 1 ? "" : anionNumber}`
+	) + (hydrate.value ? ` • ${hydrateNum > 1 ? hydrateNum : ""}${subscript("H2O")}` : "");
 	current.value = {
 		formula: name,
 		name: `${cation.Name}${
