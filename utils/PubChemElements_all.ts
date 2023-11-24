@@ -580,7 +580,7 @@ export const periodicTable = ([
       "AtomicRadius": 187,
       "IonizationEnergy": 5.999,
       "ElectronAffinity": 0.3,
-      "OxidationStates": [+3],
+      "OxidationStates": [+1,+3],
       "StandardState": "Solid",
       "MeltingPoint": 302.91,
       "BoilingPoint": 2477,
