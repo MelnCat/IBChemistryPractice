@@ -1,2 +1,3 @@
-# IBChemistryPractice
-ib chemistry polyatomic ions and naming compounds practice
+# IB Chemistry Naming Compounds Practice
+
+ok
