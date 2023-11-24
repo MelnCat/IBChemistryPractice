@@ -2241,4 +2241,4 @@ export const periodicTable = ([
       "GroupBlock": "Noble gas",
       "YearDiscovered": 2006
   }
-]  as const).filter(x => x.AtomicNumber <= 56).map(x => ({ ...x, OxidationStates: x.GroupBlock === "Alkali metal" ? [1] : x.GroupBlock === "Alkaline earth metal" ? [2] : x.GroupBlock === "Halogen" ? [-1] : x.OxidationStates }))
+]  as const).filter(x => x.AtomicNumber <= 38).map(x => ({ ...x, OxidationStates: x.GroupBlock === "Alkali metal" ? [1] : x.GroupBlock === "Alkaline earth metal" ? [2] : x.GroupBlock === "Halogen" ? [-1] : x.OxidationStates }))
