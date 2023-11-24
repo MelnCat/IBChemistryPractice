@@ -66,20 +66,26 @@ const generate = () => {
 	const anionNumber = Math.abs(cationCharge / gcd(anionCharge, cationCharge));
 	const cationNumber = Math.abs(anionCharge / gcd(anionCharge, cationCharge));
 	const hydrateNum = hydrate.value ? 1 + Math.floor(Math.random() * 10) : 0;
-	const name = subscript(
-		`${cation.Symbol}${cationNumber === 1 ? "" : cationNumber}${
-			"formula" in anion
-				? anionNumber > 1
-					? `(${anion.formula})`
-					: anion.formula
-				: anion.Symbol
-		}${anionNumber === 1 ? "" : anionNumber}`
-	) + (hydrate.value ? ` • ${hydrateNum > 1 ? hydrateNum : ""}${subscript("H2O")}` : "");
+	const name =
+		subscript(
+			`${cation.Symbol}${cationNumber === 1 ? "" : cationNumber}${
+				"formula" in anion
+					? anionNumber > 1
+						? `(${anion.formula})`
+						: anion.formula
+					: anion.Symbol
+			}${anionNumber === 1 ? "" : anionNumber}`
+		) +
+		(hydrate.value
+			? ` • ${hydrateNum > 1 ? hydrateNum : ""}${subscript("H2O")}`
+			: "");
 	current.value = {
 		formula: name,
 		name: `${cation.Name}${
 			cation.OxidationStates.length > 1 ? `(${roman(cationCharge)})` : ""
-		} ${"name" in anion ? anion.name : anionName(anion.Name)}${hydrate.value ? ` ${greekPrefix("Hydrate", hydrateNum)}` : ""}`,
+		} ${"name" in anion ? anion.name : anionName(anion.Name)}${
+			hydrate.value ? ` ${greekPrefix("Hydrate", hydrateNum)}` : ""
+		}`,
 	};
 };
 generate();
@@ -88,20 +94,35 @@ generate();
 	<section class="settings">
 		<div>
 			Bond:
-			<button @click="ionic = !ionic">
+			<button
+				@click="
+					ionic = !ionic;
+					generate();
+				"
+			>
 				{{ ionic ? "Ionic" : "Covalent" }}
 			</button>
 		</div>
 		<template v-if="ionic">
 			<div>
 				Anion:
-				<button @click="polyatomic = !polyatomic">
+				<button
+					@click="
+						polyatomic = !polyatomic;
+						generate();
+					"
+				>
 					{{ polyatomic ? "Polyatomic" : "Element" }}
 				</button>
 			</div>
 			<div>
 				Hydrate:
-				<button @click="hydrate = !hydrate">
+				<button
+					@click="
+						hydrate = !hydrate;
+						generate();
+					"
+				>
 					{{ hydrate ? "Yes" : "No" }}
 				</button>
 			</div>
